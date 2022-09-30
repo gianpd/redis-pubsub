@@ -1,0 +1,6 @@
+.venv/
+*.csv
+*.json
+*.txt
+*.pdf
+redis-data/

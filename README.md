@@ -1,0 +1,2 @@
+# A Redis Pub/Sub PoC
+The project wants to explore the redis pub/sub capability, by developing two process (microservices) which acts one as pub, publishing on a a redis topic, and another which asks to the specific redis topic. 
