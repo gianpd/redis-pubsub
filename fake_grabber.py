@@ -5,6 +5,8 @@ import random
 import redis
 import time
 
+import msgpack
+
 FPS = 10
 RATE = 1 / FPS
 KEY = 'NJ'
@@ -20,5 +22,7 @@ for i in range(1000):
     idx = random.randint(0, N-1)
     _d = ascii_letters[idx:]
     payload = {'d1': _d, 'd2': _d, 'd3': _d}
-    grabber_redis.set(KEY, json.dumps(payload))
+    payload = msgpack.packb(payload, use_bin_type=True)
+    # grabber_redis.set(KEY, json.dumps(payload))
+    grabber_redis.set(KEY, payload)
 print(f'GRABBER DONE - elapsed: {(datetime.now() - start).total_seconds()} [s]')
