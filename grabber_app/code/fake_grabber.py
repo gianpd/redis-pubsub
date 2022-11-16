@@ -29,40 +29,38 @@
 """
 
 from datetime import datetime
-# import json
 from pathlib import Path
 import string
 import random
 import redis
 import time
-
-import cv2
-
 import msgpack
+
+import argparse 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--host', type=str, required=True)
+parser.add_argument('--port', type=int, default=6379)
+parser.add_argument('--test', action='store_true')
+args = parser.parse_args()
+print(args)
 
 FPS = 10
 RATE = 1 / FPS
 KEY = 'NJ'
-
-# read_img = lambda x: cv2.cvtColor(cv2.imread(x), cv2.COLOR_BGR2RGB)
-# IMG = read_img('c56d7c9f-image_2022-10-12_14-52-25.807501.jpg')
-# print(f'READ IMG: {IMG}')
-
 IMG_BYTES = Path('c56d7c9f-image_2022-10-12_14-52-25.807501.jpg').read_bytes()
-# print(f'IMG BYTES: {len(IMG_BYTES)}')
 
-grabber_redis = redis.Redis(host='localhost', port=6379, db=0)
 
+grabber_redis = redis.Redis(host=args.host, port=args.port, db=0)
 ascii_letters = string.ascii_letters
 N = len(ascii_letters)
-
 start = datetime.now()
-for i in range(1000):
+STEPS = 1 if args.test else 1000
+for i in range(STEPS):
     time.sleep(RATE)
     idx = random.randint(0, N-1)
     _d = ascii_letters[idx:]
     payload = {'data': IMG_BYTES, 'timestamp': 12345, 'd3': _d}
     payload = msgpack.packb(payload, use_bin_type=True)
-    # grabber_redis.set(KEY, json.dumps(payload))
     grabber_redis.set(KEY, payload)
 print(f'GRABBER DONE - elapsed: {(datetime.now() - start).total_seconds()} [s]') # 101 [s]
