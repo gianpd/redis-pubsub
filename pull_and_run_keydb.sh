@@ -13,4 +13,4 @@ fi
 echo "pulling image eqalpha/keydb ..."
 docker pull eqalpha/keydb
 echo "running container ${CONTAINER_NAME} ..."
-$ docker run -p 6379:6379 --name ${CONTAINER_NAME} -d eqalpha/keydb keydb-server /etc/keydb/keydb.conf #--requirepass mypassword 
+docker run -p 6379:6379 --name ${CONTAINER_NAME} -d eqalpha/keydb keydb-server /etc/keydb/keydb.conf #--requirepass mypassword 
